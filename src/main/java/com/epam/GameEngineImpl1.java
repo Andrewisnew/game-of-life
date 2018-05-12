@@ -38,6 +38,7 @@ public class GameEngineImpl1 implements GameEngine {
             Thread down = new Thread(() -> calc(finalInitialState, raws/2 + 1, raws -1));
             up.start();
             down.start();
+
             up.join();
             down.join();
             initialState = currentState;
