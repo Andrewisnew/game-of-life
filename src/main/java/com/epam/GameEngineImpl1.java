@@ -1,8 +1,5 @@
 package com.epam;
 
-import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.RecursiveAction;
-
 public class GameEngineImpl1 implements GameEngine {
 
     public void setCurrentState(int i, int j, boolean value) {
@@ -34,12 +31,15 @@ public class GameEngineImpl1 implements GameEngine {
         for (int i = 0; i < numberIterations; i++) {
             currentState = new boolean[raws][columns];
             boolean[][] finalInitialState = initialState;
-            Thread up = new Thread(() -> calc(finalInitialState, 0, raws/2));
-            Thread down = new Thread(() -> calc(finalInitialState, raws/2 + 1, raws -1));
+            Thread up = new Thread(() -> calc(finalInitialState, 0, raws/3));
+            Thread middle = new Thread(() -> calc(finalInitialState, raws/3 + 1, 2*raws/3));
+            Thread down = new Thread(() -> calc(finalInitialState, 2*raws/3 + 1, raws - 1));
             up.start();
+            middle.start();
             down.start();
 
             up.join();
+            middle.join();
             down.join();
             initialState = currentState;
         }
