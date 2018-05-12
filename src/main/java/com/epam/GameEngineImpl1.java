@@ -76,6 +76,7 @@ public class GameEngineImpl1 implements GameEngine {
             }
             if (initialState[m][n]) {
                 ++numberOfNeighbours;
+                if(numberOfNeighbours == 4) return false;
             }
         }
 
@@ -92,18 +93,21 @@ public class GameEngineImpl1 implements GameEngine {
             }
             if (initialState[m][n]) {
                 ++numberOfNeighbours;
+                if(numberOfNeighbours == 4) return false;
             }
         }
         if (k == 0) n = n1;
         else n = k - 1;
         if (initialState[j][n]) {
             ++numberOfNeighbours;
+            if(numberOfNeighbours == 4) return false;
         }
         if (k == n1) n = 0;
         else n = k + 1;
 
         if (initialState[j][n]) {
            ++numberOfNeighbours;
+            if(numberOfNeighbours == 4) return false;
         }
 
         if (numberOfNeighbours > 3 || numberOfNeighbours < 2) {
