@@ -1,10 +1,18 @@
 package com.epam;
 
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.RecursiveAction;
+
 public class GameEngineImpl1 implements GameEngine {
+
+    public void setCurrentState(int i, int j, boolean value) {
+        currentState[i][j] = value;
+    }
 
     boolean[][] currentState;
     int raws;
     int columns;
+
 
     @Override
     public boolean[][] compute(boolean[][] initialState, int numberIterations) {
@@ -12,24 +20,38 @@ public class GameEngineImpl1 implements GameEngine {
         raws = initialState.length;
         columns = initialState[0].length;
         currentState = new boolean[raws][columns];
-        calculate(initialState, numberIterations);
+        try {
+            calculate(initialState, numberIterations);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         return currentState;
     }
 
-    private void calculate(boolean[][] initialState, int numberIterations) {
+    private void calculate(boolean[][] initialState, int numberIterations) throws InterruptedException {
 
         for (int i = 0; i < numberIterations; i++) {
             currentState = new boolean[raws][columns];
-            for (int j = 0; j < raws; j++) {///строка
-                for (int k = 0; k < columns; k++) {//столбец
-                    currentState[j][k] = isAlive(initialState, j, k);
-                }
-            }
+            boolean[][] finalInitialState = initialState;
+            Thread up = new Thread(() -> calc(finalInitialState, 0, raws/2));
+            Thread down = new Thread(() -> calc(finalInitialState, raws/2 + 1, raws -1));
+            up.start();
+            down.start();
+            up.join();
+            down.join();
             initialState = currentState;
         }
     }
 
+
+    private void calc(boolean[][] initialState, int rowNumber, int lastRowNumber){
+        for (int j = rowNumber; j <= lastRowNumber; j++) {///строка
+                for (int k = 0; k < columns; k++) {//столбец
+                    currentState[j][k] = isAlive(initialState, j, k);
+                }
+            }
+    }
     private boolean isAlive(boolean[][] initialState, int j, int k) {
 
         int numberOfNeighbours = 0;
