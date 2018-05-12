@@ -28,7 +28,7 @@ public class GameEngineImpl1 implements GameEngine {
 
     private void calculate(boolean[][] initialState, int numberIterations) throws InterruptedException {
 
-        for (int i = 0; i < numberIterations; i++) {
+        for (int i = 0; i < numberIterations; ++i) {
             currentState = new boolean[raws][columns];
             boolean[][] finalInitialState = initialState;
             Thread up = new Thread(() -> calc(finalInitialState, 0, raws/4));
@@ -50,8 +50,8 @@ public class GameEngineImpl1 implements GameEngine {
 
 
     private void calc(boolean[][] initialState, int rowNumber, int lastRowNumber){
-        for (int j = rowNumber; j <= lastRowNumber; j++) {///строка
-                for (int k = 0; k < columns; k++) {//столбец
+        for (int j = rowNumber; j <= lastRowNumber; ++j) {///строка
+                for (int k = 0; k < columns; ++k) {//столбец
                     currentState[j][k] = isAlive(initialState, j, k);
                 }
             }
@@ -61,48 +61,55 @@ public class GameEngineImpl1 implements GameEngine {
         int numberOfNeighbours = 0;
         int m;
         int n;
-        m = j == 0 ? raws - 1 : j - 1;
+        int i = raws - 1;
         int n1 = columns - 1;
+        if (j == 0) m = i;
+        else m = j - 1;
         for (int top = -1; top < 2; ++top) {//верхние соседи
-            if(k + top == -1) {
+            int n2 = k + top;
+            if(n2 == -1) {
                 n = n1;
-            }else if(k + top == columns){
+            }else if(n2 == columns){
                 n = 0;
             } else {
-                n = k + top;
+                n = n2;
             }
             if (initialState[m][n]) {
-                numberOfNeighbours++;
+                ++numberOfNeighbours;
             }
         }
 
-        m = j == raws - 1 ? 0 : j + 1;
+        if (j == i) m = 0;
+        else m = j + 1;
         for (int top = -1; top < 2; ++top) {//нижние соседи
-            if(k + top == -1) {
+            int i1 = k + top;
+            if(i1 == -1) {
                 n = n1;
-            }else if(k + top == columns){
+            }else if(i1 == columns){
                 n = 0;
             } else {
-                n = k + top;
+                n = i1;
             }
             if (initialState[m][n]) {
-                numberOfNeighbours++;
+                ++numberOfNeighbours;
             }
         }
-        n = k == 0 ? n1 : k - 1;
+        if (k == 0) n = n1;
+        else n = k - 1;
         if (initialState[j][n]) {
-            numberOfNeighbours++;
+            ++numberOfNeighbours;
         }
-        n = k == n1 ? 0 : k + 1;
+        if (k == n1) n = 0;
+        else n = k + 1;
 
         if (initialState[j][n]) {
-            numberOfNeighbours++;
+           ++numberOfNeighbours;
         }
 
         if (numberOfNeighbours > 3 || numberOfNeighbours < 2) {
             return false;
         }
-        if (numberOfNeighbours == 3) {
+        else if (numberOfNeighbours == 3) {
             return true;
         }
         return initialState[j][k];
