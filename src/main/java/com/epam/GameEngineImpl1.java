@@ -31,15 +31,18 @@ public class GameEngineImpl1 implements GameEngine {
         for (int i = 0; i < numberIterations; i++) {
             currentState = new boolean[raws][columns];
             boolean[][] finalInitialState = initialState;
-            Thread up = new Thread(() -> calc(finalInitialState, 0, raws/3));
-            Thread middle = new Thread(() -> calc(finalInitialState, raws/3 + 1, 2*raws/3));
-            Thread down = new Thread(() -> calc(finalInitialState, 2*raws/3 + 1, raws - 1));
+            Thread up = new Thread(() -> calc(finalInitialState, 0, raws/4));
+            Thread middle = new Thread(() -> calc(finalInitialState, raws/4 + 1, raws/2));
+            Thread middle2 = new Thread(() -> calc(finalInitialState, raws/2 + 1, 3*raws/4));
+            Thread down = new Thread(() -> calc(finalInitialState, 3*raws/4 + 1, raws - 1));
             up.start();
             middle.start();
+            middle2.start();
             down.start();
 
             up.join();
             middle.join();
+            middle2.join();
             down.join();
             initialState = currentState;
         }
