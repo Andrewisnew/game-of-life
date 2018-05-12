@@ -62,9 +62,10 @@ public class GameEngineImpl1 implements GameEngine {
         int m;
         int n;
         m = j == 0 ? raws - 1 : j - 1;
+        int n1 = columns - 1;
         for (int top = -1; top < 2; ++top) {//верхние соседи
             if(k + top == -1) {
-                n = columns - 1;
+                n = n1;
             }else if(k + top == columns){
                 n = 0;
             } else {
@@ -78,7 +79,7 @@ public class GameEngineImpl1 implements GameEngine {
         m = j == raws - 1 ? 0 : j + 1;
         for (int top = -1; top < 2; ++top) {//нижние соседи
             if(k + top == -1) {
-                n = columns - 1;
+                n = n1;
             }else if(k + top == columns){
                 n = 0;
             } else {
@@ -88,11 +89,11 @@ public class GameEngineImpl1 implements GameEngine {
                 numberOfNeighbours++;
             }
         }
-        n = k == 0 ? columns - 1 : k - 1;
+        n = k == 0 ? n1 : k - 1;
         if (initialState[j][n]) {
             numberOfNeighbours++;
         }
-        n = k == columns - 1 ? 0 : k + 1;
+        n = k == n1 ? 0 : k + 1;
 
         if (initialState[j][n]) {
             numberOfNeighbours++;
