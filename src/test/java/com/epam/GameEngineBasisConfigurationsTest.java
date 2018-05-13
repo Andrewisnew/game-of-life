@@ -4,8 +4,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class GameEngineBasisConfigurationsTest {
-    GameEngine gameEngine=new GameEngineImpl1();
-
+    private GameEngine gameEngine=new GameEngineImpl();
+@Test
+void foo(){}
     @Test
     void standardAliveSectorTest2() {
         boolean[][] initialState = {
